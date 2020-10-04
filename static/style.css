@@ -1,0 +1,47 @@
+body {
+    width: 100vw;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1.2em;
+}
+
+nav.home-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+a.register {
+    padding: 12px;
+    background-color: white;
+    color: black;
+}
+
+a.login {
+    padding: 12px;
+    background-color: lightblue;
+    color: black;
+}
+
+div.game {
+    margin-left: 10vw;
+    width: 80vw;
+    height: 60px;
+    font-size: 48px;
+}
+
+div.game.csgo {
+    background-color: #c97e25;
+    color: #111;
+}
+
+div.game.scpsl {
+    background-color: #111111;
+    color: #eeeeee;
+    font-weight: bold;
+}
+
+.small-para {
+    margin-left: 25vw;
+    max-width: 50vw;
+}
