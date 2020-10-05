@@ -8,7 +8,7 @@ CREATE TABLE users (
 
     discord_id BIGINT UNSIGNED,
 
-    pro BOOL NOT NULL DEFAULT 0,
+    upgraded BOOL NOT NULL DEFAULT 0,
     upgraded_at TIMESTAMP,
 
     PRIMARY KEY (id)

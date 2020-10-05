@@ -9,6 +9,7 @@ use actix_web::{
 };
 use actix_http::{body::Body, Response};
 use actix_files::Files;
+use actix_session::CookieSession;
 
 use sqlx::mysql::MySqlPool;
 
@@ -20,7 +21,7 @@ use std::{
 };
 
 use routes::account::{
-    create_account, login_account
+    create_account, login_account, get_account_details,
 };
 
 
@@ -49,11 +50,16 @@ async fn main() -> std::io::Result<()> {
             .data(tera)
             .data(pool)
             .wrap(middleware::Logger::default()) // enable logger
+            .wrap(
+                CookieSession::signed(env::var("SECRET").expect("SECRET not provided").as_bytes())
+                    .secure(!cfg!(debug_assertions))
+            )
             .service(web::resource("/").route(web::get().to(index)))
             .service(
                 web::scope("/api")
                     .route("/account", web::post().to(create_account))
-                    .route("/account", web::get().to(login_account))
+                    .route("/account", web::get().to(get_account_details))
+                    .route("/account/login", web::get().to(login_account))
             )
             .service(Files::new("/static", "./static/").show_files_listing())
             .service(web::scope("").wrap(error_handlers()))

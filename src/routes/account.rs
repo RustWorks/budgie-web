@@ -1,25 +1,47 @@
 use actix_web::{
     error, web, HttpResponse, Result, Error,
 };
+use actix_session::Session;
 
 use serde::{Serialize, Deserialize};
 
 use sha2::{Sha512, Digest};
 
+use sqlx::mysql::MySqlPool;
+
 use std::sync::Arc;
 
-use sqlx::mysql::MySqlPool;
+use chrono::{
+    DateTime,
+    offset::Utc,
+};
 
 
 #[derive(Serialize, Deserialize)]
-pub struct JsonUserAccount {
+pub struct JsonCreateAccount {
     username: String,
     email: String,
     password: String,
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct JsonUserCredentials {
+pub struct JsonUserDetails {
+    id: u32,
+    username: String,
+    email: String,
+    #[serde(skip_serializing)]
+    password_hash: String,
+
+    created_at: DateTime<Utc>,
+
+    discord_id: Option<u64>,
+
+    upgraded: bool,
+    upgraded_at: Option<DateTime<Utc>>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct JsonLoginAccount {
     email: String,
     password: String,
 }
@@ -38,7 +60,7 @@ fn check_password_hash(password_hash: String, password: impl AsRef<[u8]>, userna
     password_hash == hash_password(username, password)
 }
 
-pub async fn create_account(new_user: web::Json<JsonUserAccount>, pool: web::Data<Arc<MySqlPool>>) -> Result<HttpResponse, Error> {
+pub async fn create_account(new_user: web::Json<JsonCreateAccount>, pool: web::Data<Arc<MySqlPool>>) -> Result<HttpResponse, Error> {
     let mut mysql_pool = pool.clone().acquire().await
         .map_err(|_| error::ErrorInternalServerError("SQLx obtaining error"))?;
 
@@ -82,12 +104,12 @@ pub async fn create_account(new_user: web::Json<JsonUserAccount>, pool: web::Dat
     }
 }
 
-pub async fn login_account(user_details: web::Json<JsonUserCredentials>, pool: web::Data<Arc<MySqlPool>>) -> Result<HttpResponse, Error> {
+pub async fn login_account(user_details: web::Json<JsonLoginAccount>, pool: web::Data<Arc<MySqlPool>>, session: Session) -> Result<HttpResponse, Error> {
     let mut mysql_pool = pool.clone().acquire().await
         .map_err(|_| error::ErrorInternalServerError("SQLx obtaining error"))?;
 
     match sqlx::query!(
-        "SELECT username, password_hash FROM users WHERE email = ?",
+        "SELECT id, username, password_hash FROM users WHERE email = ?",
         user_details.email
     )
         .fetch_one(&mut mysql_pool)
@@ -104,8 +126,10 @@ pub async fn login_account(user_details: web::Json<JsonUserCredentials>, pool: w
         }
 
         Ok(user) => {
-            if check_password_hash(user.password_hash, user.username, &user_details.password) {
-                Ok(HttpResponse::Ok().content_type("application/json").body(r#"{"message": "Logged in", "token": ""}"#))
+            if check_password_hash(user.password_hash.clone(), user.username, &user_details.password) {
+                session.set("user_id", user.id).map_err(|_| error::ErrorInternalServerError("Could not set session variables up"))?;
+
+                Ok(HttpResponse::Ok().content_type("application/json").body(r#"{"message": "Logged in"}"#))
             }
             else {
                 println!("Password was incorrect");
@@ -113,5 +137,48 @@ pub async fn login_account(user_details: web::Json<JsonUserCredentials>, pool: w
                 Err(error::ErrorBadRequest("Could not login with those credentials"))
             }
         }
+    }
+}
+
+pub async fn get_account_details(pool: web::Data<Arc<MySqlPool>>, session: Session) -> Result<HttpResponse, Error> {
+    let mut mysql_pool = pool.clone().acquire().await
+        .map_err(|_| error::ErrorInternalServerError("SQLx obtaining error"))?;
+
+    if let Ok(user_id_opt) = session.get::<u32>("user_id") {
+        if let Some(user_id) = user_id_opt {
+            match sqlx::query_as_unchecked!(JsonUserDetails,
+                "SELECT * FROM users WHERE id = ?",
+                user_id
+            )
+                .fetch_one(&mut mysql_pool)
+                .await {
+
+                Ok(user) => {
+                    match serde_json::to_string(&user) {
+                        Ok(json) => {
+                            Ok(HttpResponse::Ok().content_type("application/json").body(json))
+                        },
+
+                        Err(e) => {
+                            Err(error::ErrorInternalServerError(format!("Could not produce JSON: {:?}", e)))
+                        },
+                    }
+                },
+
+                Err(sqlx::Error::RowNotFound) => {
+                    Err(error::ErrorBadRequest("User does not exist"))
+                },
+
+                Err(_) => {
+                    Err(error::ErrorInternalServerError("SQLx query failed"))
+                }
+            }
+        }
+        else {
+            Err(error::ErrorBadRequest("Session corrupted"))
+        }
+    }
+    else {
+        Err(error::ErrorForbidden("Not logged in"))
     }
 }
