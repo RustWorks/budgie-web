@@ -21,13 +21,11 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d244531-94ea-4e35-85d9-155334a0443f" name="Default Changelist" comment="readme">
+    <list default="true" id="5d244531-94ea-4e35-85d9-155334a0443f" name="Default Changelist" comment="get account details. bumped actix-web version. store user_id in session">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/create.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/account.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/mod.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +86,8 @@
       <workItem from="1601853763130" duration="38000" />
       <workItem from="1601853814347" duration="36000" />
       <workItem from="1601853873891" duration="1437000" />
-      <workItem from="1601900351357" duration="9398000" />
+      <workItem from="1601900351357" duration="9561000" />
+      <workItem from="1601970954342" duration="3486000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1601853582630</created>
@@ -104,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601853929137</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="get account details. bumped actix-web version. store user_id in session">
+      <created>1601937355528</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1601937355528</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,7 +131,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial" />
     <MESSAGE value="readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="readme" />
+    <MESSAGE value="get account details. bumped actix-web version. store user_id in session" />
+    <option name="LAST_COMMIT_MESSAGE" value="get account details. bumped actix-web version. store user_id in session" />
   </component>
   <component name="WindowStateProjectService">
     <state x="556" y="415" width="797" height="262" key="#Rust" timestamp="1601828716932">
@@ -136,13 +143,13 @@
       <screen x="0" y="20" width="1920" height="1060" />
     </state>
     <state x="743" y="307" width="424" height="478" key="FileChooserDialogImpl/0.20.1920.1060@0.20.1920.1060" timestamp="1601936588001" />
-    <state x="555" y="272" width="800" height="548" key="Vcs.Push.Dialog.v2" timestamp="1601853931146">
+    <state x="555" y="272" width="800" height="548" key="Vcs.Push.Dialog.v2" timestamp="1601937358662">
       <screen x="0" y="20" width="1920" height="1060" />
     </state>
-    <state x="555" y="272" width="800" height="548" key="Vcs.Push.Dialog.v2/0.20.1920.1060@0.20.1920.1060" timestamp="1601853931146" />
-    <state x="623" y="253" width="672" height="678" key="search.everywhere.popup" timestamp="1601854442933">
+    <state x="555" y="272" width="800" height="548" key="Vcs.Push.Dialog.v2/0.20.1920.1060@0.20.1920.1060" timestamp="1601937358662" />
+    <state x="623" y="253" width="672" height="678" key="search.everywhere.popup" timestamp="1601986511866">
       <screen x="0" y="20" width="1920" height="1060" />
     </state>
-    <state x="623" y="253" width="672" height="678" key="search.everywhere.popup/0.20.1920.1060@0.20.1920.1060" timestamp="1601854442933" />
+    <state x="623" y="253" width="672" height="678" key="search.everywhere.popup/0.20.1920.1060@0.20.1920.1060" timestamp="1601986511866" />
   </component>
 </project>

@@ -20,8 +20,12 @@ use std::{
     sync::Arc,
 };
 
-use routes::account::{
-    create_account, login_account, get_account_details,
+use routes::{
+    user::{
+        create_user, login_user, get_user_details,
+    },
+    account::{},
+    budget::{},
 };
 
 
@@ -57,9 +61,11 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/").route(web::get().to(index)))
             .service(
                 web::scope("/api")
-                    .route("/account", web::post().to(create_account))
-                    .route("/account", web::get().to(get_account_details))
-                    .route("/account/login", web::get().to(login_account))
+                    .route("/account", web::post().to(create_user))
+                    .route("/account", web::get().to(get_user_details))
+                    .route("/account/login", web::get().to(login_user))
+
+                    .route("/budget", web::post().to(create_budget))
             )
             .service(Files::new("/static", "./static/").show_files_listing())
             .service(web::scope("").wrap(error_handlers()))
