@@ -166,19 +166,19 @@ pub async fn get_user_details(pool: web::Data<Arc<MySqlPool>>, session: Session)
                 },
 
                 Err(sqlx::Error::RowNotFound) => {
-                    Err(error::ErrorBadRequest("User does not exist"))
+                    Err(error::ErrorBadRequest("Not logged in"))
                 },
 
                 Err(_) => {
                     Err(error::ErrorInternalServerError("SQLx query failed"))
-                }
+                },
             }
         }
         else {
-            Err(error::ErrorBadRequest("Session corrupted"))
+            Err(error::ErrorBadRequest("Not logged in"))
         }
     }
     else {
-        Err(error::ErrorForbidden("Not logged in"))
+        Err(error::ErrorForbidden("Session corrupted"))
     }
 }

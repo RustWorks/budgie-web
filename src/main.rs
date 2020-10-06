@@ -24,10 +24,11 @@ use routes::{
     user::{
         create_user, login_user, get_user_details,
     },
-    account::{},
+    account::{
+        create_fund_source, delete_fund_source, get_fund_source
+    },
     budget::{},
 };
-
 
 async fn index(tmpl: web::Data<Tera>) -> Result<HttpResponse, Error> {
     let s: String = tmpl.render("index.html", &tera::Context::new())
@@ -65,7 +66,9 @@ async fn main() -> std::io::Result<()> {
                     .route("/account", web::get().to(get_user_details))
                     .route("/account/login", web::get().to(login_user))
 
-                    .route("/budget", web::post().to(create_budget))
+                    .route("/fund_source", web::post().to(create_fund_source))
+                    .route("/fund_source/{fund_id}", web::delete().to(delete_fund_source))
+                    .route("/fund_source/{fund_id}", web::get().to(get_fund_source))
             )
             .service(Files::new("/static", "./static/").show_files_listing())
             .service(web::scope("").wrap(error_handlers()))

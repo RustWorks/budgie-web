@@ -25,7 +25,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/account.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/user.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/user.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +88,8 @@
       <workItem from="1601853873891" duration="1437000" />
       <workItem from="1601900351357" duration="9561000" />
       <workItem from="1601970954342" duration="3486000" />
+      <workItem from="1602010948051" duration="2518000" />
+      <workItem from="1602018881479" duration="4892000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1601853582630</created>
