@@ -23,9 +23,12 @@
   <component name="ChangeListManager">
     <list default="true" id="5d244531-94ea-4e35-85d9-155334a0443f" name="Default Changelist" comment="get account details. bumped actix-web version. store user_id in session">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/create.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/account.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/account.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/account.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/user.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/user.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +58,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
@@ -90,6 +94,7 @@
       <workItem from="1601970954342" duration="3486000" />
       <workItem from="1602010948051" duration="2518000" />
       <workItem from="1602018881479" duration="4892000" />
+      <workItem from="1602086531023" duration="16639000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1601853582630</created>

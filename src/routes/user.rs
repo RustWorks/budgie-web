@@ -16,6 +16,8 @@ use chrono::{
     offset::Utc,
 };
 
+use crate::{get_user_id, respond_with_json};
+
 
 #[derive(Serialize, Deserialize)]
 pub struct JsonCreateUser {
@@ -144,41 +146,25 @@ pub async fn get_user_details(pool: web::Data<Arc<MySqlPool>>, session: Session)
     let mut mysql_pool = pool.clone().acquire().await
         .map_err(|_| error::ErrorInternalServerError("SQLx obtaining error"))?;
 
-    if let Ok(user_id_opt) = session.get::<u32>("user_id") {
-        if let Some(user_id) = user_id_opt {
-            match sqlx::query_as_unchecked!(JsonUserDetails,
-                "SELECT * FROM users WHERE id = ?",
-                user_id
-            )
-                .fetch_one(&mut mysql_pool)
-                .await {
+    let user_id = get_user_id(session)?;
 
-                Ok(user) => {
-                    match serde_json::to_string(&user) {
-                        Ok(json) => {
-                            Ok(HttpResponse::Ok().content_type("application/json").body(json))
-                        },
+    match sqlx::query_as_unchecked!(JsonUserDetails,
+        "SELECT * FROM users WHERE id = ?",
+        user_id
+    )
+        .fetch_one(&mut mysql_pool)
+        .await {
 
-                        Err(e) => {
-                            Err(error::ErrorInternalServerError(format!("Could not produce JSON: {:?}", e)))
-                        },
-                    }
-                },
+        Ok(user) => {
+            respond_with_json(&user)
+        },
 
-                Err(sqlx::Error::RowNotFound) => {
-                    Err(error::ErrorBadRequest("Not logged in"))
-                },
-
-                Err(_) => {
-                    Err(error::ErrorInternalServerError("SQLx query failed"))
-                },
-            }
-        }
-        else {
+        Err(sqlx::Error::RowNotFound) => {
             Err(error::ErrorBadRequest("Not logged in"))
-        }
-    }
-    else {
-        Err(error::ErrorForbidden("Session corrupted"))
+        },
+
+        Err(_) => {
+            Err(error::ErrorInternalServerError("SQLx query failed"))
+        },
     }
 }

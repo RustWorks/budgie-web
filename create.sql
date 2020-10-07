@@ -59,7 +59,7 @@ CREATE TABLE transactions (
     budget_id INT UNSIGNED,
 
     volume INT NOT NULL,
-    currency VARCHAR(3) NOT NULL DEFAULT 'GBP',
+    original_currency VARCHAR(3) NOT NULL DEFAULT 'GBP',
 
     notes TEXT,
 

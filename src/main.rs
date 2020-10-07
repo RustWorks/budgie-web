@@ -9,9 +9,14 @@ use actix_web::{
 };
 use actix_http::{body::Body, Response};
 use actix_files::Files;
-use actix_session::CookieSession;
+use actix_session::{
+    CookieSession,
+    Session,
+};
 
 use sqlx::mysql::MySqlPool;
+
+use serde::Serialize;
 
 use tera::Tera;
 
@@ -24,11 +29,15 @@ use routes::{
     user::{
         create_user, login_user, get_user_details,
     },
-    account::{
-        create_fund_source, delete_fund_source, get_fund_source
+    fund_source::{
+        create_fund_source, delete_fund_source, get_fund_source,
     },
     budget::{},
+    transaction::{
+        create_transaction, get_transactions,
+    },
 };
+
 
 async fn index(tmpl: web::Data<Tera>) -> Result<HttpResponse, Error> {
     let s: String = tmpl.render("index.html", &tera::Context::new())
@@ -69,6 +78,9 @@ async fn main() -> std::io::Result<()> {
                     .route("/fund_source", web::post().to(create_fund_source))
                     .route("/fund_source/{fund_id}", web::delete().to(delete_fund_source))
                     .route("/fund_source/{fund_id}", web::get().to(get_fund_source))
+
+                    .route("/{type}/{id}/transactions", web::post().to(create_transaction))
+                    .route("/{type}/{id}/transactions", web::get().to(get_transactions))
             )
             .service(Files::new("/static", "./static/").show_files_listing())
             .service(web::scope("").wrap(error_handlers()))
@@ -120,5 +132,31 @@ fn get_error_response<B>(res: &ServiceResponse<B>, error: &str) -> Response<Body
             }
         }
         None => fallback(error),
+    }
+}
+
+pub fn get_user_id(session: Session) -> Result<u32, Error> {
+    if let Ok(user_id_opt) = session.get::<u32>("user_id") {
+        if let Some(user_id) = user_id_opt {
+            Ok(user_id)
+        }
+        else {
+            Err(error::ErrorBadRequest("Not logged in"))
+        }
+    }
+    else {
+        Err(error::ErrorForbidden("Session corrupted"))
+    }
+}
+
+pub fn respond_with_json<T: Serialize>(object: T) -> Result<HttpResponse, Error> {
+    match serde_json::to_string(&object) {
+        Ok(json) => {
+            Ok(HttpResponse::Ok().content_type("application/json").body(json))
+        },
+
+        Err(e) => {
+            Err(error::ErrorInternalServerError(format!("Could not produce JSON: {:?}", e)))
+        },
     }
 }
