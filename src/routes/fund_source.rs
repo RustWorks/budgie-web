@@ -12,6 +12,8 @@ use chrono::{
     offset::Utc,
 };
 
+use sqlx::types::BigDecimal;
+
 use crate::{get_user_id, respond_with_json};
 
 
@@ -32,7 +34,7 @@ pub struct JsonFundSource {
 
     created_at: DateTime<Utc>,
 
-    balance: i64,
+    pub balance: Option<BigDecimal>,
 }
 
 pub async fn create_fund_source(new_fund_source: web::Json<JsonCreateFundSource>, pool: web::Data<Arc<MySqlPool>>, session: Session) -> Result<HttpResponse, Error> {
@@ -93,7 +95,7 @@ pub async fn get_fund_source(req: HttpRequest, pool: web::Data<Arc<MySqlPool>>, 
     let user_id = get_user_id(session)?;
 
     match sqlx::query_as!(JsonFundSource,
-        "SELECT *, (SELECT SUM(volume) FROM transactions WHERE fund_source_id = ?) AS balance FROM fund_sources WHERE user_id = ? AND id = ?",
+        "SELECT *, (SELECT SUM(volume) AS balance FROM transactions WHERE fund_source_id = ?) AS balance FROM fund_sources WHERE user_id = ? AND id = ?",
         fund_source_id, fund_source_id, user_id
     )
         .fetch_one(&mut mysql_pool)

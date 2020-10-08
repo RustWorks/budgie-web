@@ -1,3 +1,4 @@
+pub mod consts;
 mod routes;
 
 use actix_web::{
@@ -71,9 +72,9 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/").route(web::get().to(index)))
             .service(
                 web::scope("/api")
-                    .route("/account", web::post().to(create_user))
-                    .route("/account", web::get().to(get_user_details))
-                    .route("/account/login", web::get().to(login_user))
+                    .route("/user", web::post().to(create_user))
+                    .route("/user", web::get().to(get_user_details))
+                    .route("/user/login", web::get().to(login_user))
 
                     .route("/fund_source", web::post().to(create_fund_source))
                     .route("/fund_source/{fund_id}", web::delete().to(delete_fund_source))

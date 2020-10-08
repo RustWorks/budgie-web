@@ -1,0 +1,1 @@
+pub const TRANSACTION_PAGE_SIZE: u32 = 25;
